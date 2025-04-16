@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,8 +29,8 @@ import { QuestionForm } from "@/components/quiz/QuestionForm";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { CalendarIcon, Clock, Plus, CalendarDays, ArrowLeft, Trash2, Check, Save } from "lucide-react";
 import { Question } from "@/types/quiz";
+import { QuizScheduling } from "@/components/quiz/QuizScheduling";
 
-// Mock topics for demo purposes
 const topics = [
   "Mathematics",
   "Science",
@@ -49,6 +48,8 @@ const quizSchema = z.object({
   description: z.string().min(1, "Description is required"),
   topic: z.string().min(1, "Topic is required"),
   timeLimit: z.coerce.number().int().min(1, "Time limit must be at least 1 minute"),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
 });
 
 type QuizFormValues = z.infer<typeof quizSchema>;
@@ -71,13 +72,11 @@ export default function CreateQuizPage() {
 
   const handleSaveQuestion = (questionData: any) => {
     if (editingQuestion) {
-      // Update existing question
       setQuestions(
         questions.map((q) => (q.id === editingQuestion.id ? { ...questionData, id: q.id } : q))
       );
       setEditingQuestion(null);
     } else {
-      // Add new question
       const newQuestion = {
         ...questionData,
         id: `question-${Date.now()}`,
@@ -97,13 +96,14 @@ export default function CreateQuizPage() {
   };
 
   const onSubmit = (data: QuizFormValues) => {
-    // Here you would submit the quiz to your backend
     console.log({
       ...data,
       questions,
       published: false,
       createdAt: new Date(),
       updatedAt: new Date(),
+      startDate: data.startDate || null,
+      endDate: data.endDate || null,
     });
   };
 
@@ -248,32 +248,7 @@ export default function CreateQuizPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="startDate">Start Date & Time</Label>
-                    <div className="flex mt-1.5">
-                      <Input id="startDate" placeholder="Not set" />
-                      <Button variant="outline" size="icon" className="ml-2">
-                        <CalendarDays className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1.5">
-                      Quiz will be available from this date and time.
-                    </p>
-                  </div>
-                  <div>
-                    <Label htmlFor="endDate">End Date & Time</Label>
-                    <div className="flex mt-1.5">
-                      <Input id="endDate" placeholder="Not set" />
-                      <Button variant="outline" size="icon" className="ml-2">
-                        <CalendarDays className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1.5">
-                      Quiz will no longer be available after this date and time.
-                    </p>
-                  </div>
-                </div>
+                <QuizScheduling form={form} />
               </CardContent>
             </Card>
           </TabsContent>
