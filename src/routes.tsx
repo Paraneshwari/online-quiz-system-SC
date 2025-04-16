@@ -1,4 +1,3 @@
-
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
@@ -7,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import CreateQuizPage from "./pages/CreateQuizPage";
 import QuizTakingPage from "./pages/QuizTakingPage";
 import NotFound from "./pages/NotFound";
+import QuestionBankPage from "./pages/QuestionBankPage";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -56,6 +56,14 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <QuizTakingPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/question-bank",
+    element: (
+      <ProtectedRoute>
+        <QuestionBankPage />
       </ProtectedRoute>
     ),
   },
