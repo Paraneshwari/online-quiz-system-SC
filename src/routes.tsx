@@ -7,6 +7,7 @@ import CreateQuizPage from "./pages/CreateQuizPage";
 import QuizTakingPage from "./pages/QuizTakingPage";
 import NotFound from "./pages/NotFound";
 import QuestionBankPage from "./pages/QuestionBankPage";
+import ProfilePage from "./pages/ProfilePage";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -64,6 +65,14 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <QuestionBankPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
       </ProtectedRoute>
     ),
   },
