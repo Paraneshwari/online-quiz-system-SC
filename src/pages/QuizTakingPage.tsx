@@ -34,6 +34,7 @@ const mockQuiz = {
       ],
       explanation: "Mitochondria are organelles that act as the powerhouse of the cell by generating most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy.",
       points: 1,
+      image: "",  // Added empty image property
     },
     {
       id: "q2",
@@ -47,6 +48,7 @@ const mockQuiz = {
       ],
       explanation: "DNA (deoxyribonucleic acid) is a molecule that carries genetic instructions for the development, functioning, growth and reproduction of all known organisms.",
       points: 1,
+      image: "",  // Added empty image property
     },
     {
       id: "q3",
@@ -60,6 +62,7 @@ const mockQuiz = {
       ],
       explanation: "Chloroplasts are organelles that conduct photosynthesis, where the photosynthetic pigment chlorophyll captures the energy from sunlight and converts it into chemical energy.",
       points: 1,
+      image: "",  // Added empty image property
     },
     {
       id: "q4",
@@ -71,6 +74,7 @@ const mockQuiz = {
       ],
       explanation: "Cell theory states that all living organisms are composed of cells, cells are the basic unit of life, and all cells arise from pre-existing cells.",
       points: 1,
+      image: "",  // Added empty image property
     },
     {
       id: "q5",
@@ -79,6 +83,7 @@ const mockQuiz = {
       answer: "photosynthesis",
       explanation: "Photosynthesis is the process used by plants, algae and certain bacteria to harness energy from sunlight and turn it into chemical energy.",
       points: 2,
+      image: "",  // Added empty image property
     },
   ],
   published: true,
