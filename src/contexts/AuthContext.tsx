@@ -51,6 +51,10 @@ const MOCK_USERS: User[] = [
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [registeredUsers, setRegisteredUsers] = useState<User[]>(() => {
+    const storedUsers = localStorage.getItem("quizCraftRegisteredUsers");
+    return storedUsers ? JSON.parse(storedUsers) : [];
+  });
 
   // Check for stored user on component mount
   useEffect(() => {
@@ -61,6 +65,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
   }, []);
 
+  // Save registered users to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("quizCraftRegisteredUsers", JSON.stringify(registeredUsers));
+  }, [registeredUsers]);
+
   const login = async (email: string, password: string) => {
     // Simulate API call
     setLoading(true);
@@ -69,8 +78,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Fix: Make the case-insensitive email comparison
-      const foundUser = MOCK_USERS.find(
+      // Check in both mock users and registered users
+      const allUsers = [...MOCK_USERS, ...registeredUsers];
+      const foundUser = allUsers.find(
         u => u.email.toLowerCase() === email.toLowerCase()
       );
       
@@ -94,8 +104,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check if user already exists
-      if (MOCK_USERS.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+      // Check if user already exists in both mock and registered users
+      const allUsers = [...MOCK_USERS, ...registeredUsers];
+      if (allUsers.some(u => u.email.toLowerCase() === email.toLowerCase())) {
         throw new Error("Email already in use");
       }
       
@@ -108,8 +119,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         avatarUrl: `https://api.dicebear.com/7.x/thumbs/svg?seed=${email}`,
       };
       
-      // In a real app, we'd save this to a database
-      // For demo, we'll just set the current user
+      // Add to registered users
+      setRegisteredUsers(prev => [...prev, newUser]);
+      
+      // Set current user and save to localStorage
       setUser(newUser);
       localStorage.setItem("quizCraftUser", JSON.stringify(newUser));
     } finally {
@@ -123,7 +136,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      const foundUser = MOCK_USERS.find(
+      // Check in both mock and registered users
+      const allUsers = [...MOCK_USERS, ...registeredUsers];
+      const foundUser = allUsers.find(
         u => u.email.toLowerCase() === email.toLowerCase()
       );
       
