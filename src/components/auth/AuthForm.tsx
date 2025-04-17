@@ -21,6 +21,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useAuth, UserRole } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
@@ -41,6 +50,13 @@ const loginSchema = z.object({
     .min(1, { message: "Password is required" }),
 });
 
+const resetPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email address" }),
+});
+
 const registerSchema = z.object({
   name: z
     .string()
@@ -59,18 +75,27 @@ const registerSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
+type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function AuthForm({ type }: AuthFormProps) {
-  const { login, register: registerUser, loading } = useAuth();
+  const { login, register: registerUser, loading, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [authError, setAuthError] = useState<string | null>(null);
-
+  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
+    },
+  });
+
+  const resetPasswordForm = useForm<ResetPasswordFormValues>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      email: "",
     },
   });
 
@@ -98,6 +123,21 @@ export function AuthForm({ type }: AuthFormProps) {
     }
   };
 
+  const onResetPasswordSubmit = async (values: ResetPasswordFormValues) => {
+    setAuthError(null);
+    try {
+      await resetPassword(values.email);
+      setIsResetDialogOpen(false);
+      resetPasswordForm.reset();
+      toast({
+        title: "Password reset email sent",
+        description: "Please check your email for instructions to reset your password.",
+      });
+    } catch (error) {
+      setAuthError((error as Error).message);
+    }
+  };
+
   const onRegisterSubmit = async (values: RegisterFormValues) => {
     setAuthError(null);
     try {
@@ -119,49 +159,100 @@ export function AuthForm({ type }: AuthFormProps) {
 
   if (type === "login") {
     return (
-      <Form {...loginForm}>
-        <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
-          <FormField
-            control={loginForm.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="you@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+      <>
+        <Form {...loginForm}>
+          <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
+            <FormField
+              control={loginForm.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="you@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={loginForm.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {authError && (
+              <div className="text-sm text-destructive">{authError}</div>
             )}
-          />
-          <FormField
-            control={loginForm.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {authError && (
-            <div className="text-sm text-destructive">{authError}</div>
-          )}
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Logging in...
-              </>
-            ) : (
-              "Sign in"
-            )}
-          </Button>
-        </form>
-      </Form>
+            <div className="flex flex-col space-y-4">
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </Button>
+              <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="link" type="button" className="mx-auto">
+                    Forgot password?
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Reset your password</DialogTitle>
+                    <DialogDescription>
+                      Enter your email address and we'll send you instructions to reset your password.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <Form {...resetPasswordForm}>
+                    <form onSubmit={resetPasswordForm.handleSubmit(onResetPasswordSubmit)} className="space-y-4">
+                      <FormField
+                        control={resetPasswordForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="you@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {authError && (
+                        <div className="text-sm text-destructive">{authError}</div>
+                      )}
+                      <DialogFooter>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Sending...
+                            </>
+                          ) : (
+                            "Send reset instructions"
+                          )}
+                        </Button>
+                      </DialogFooter>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </form>
+        </Form>
+      </>
     );
   }
 

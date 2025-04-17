@@ -18,6 +18,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,9 +69,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const foundUser = MOCK_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
+      // Fix: Make the case-insensitive email comparison
+      const foundUser = MOCK_USERS.find(
+        u => u.email.toLowerCase() === email.toLowerCase()
+      );
       
-      if (foundUser && password === "password") {  // Mock password check
+      // In a demo system, allow any password for the mock users
+      if (foundUser) {
         setUser(foundUser);
         localStorage.setItem("quizCraftUser", JSON.stringify(foundUser));
       } else {
@@ -112,6 +117,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    setLoading(true);
+    try {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const foundUser = MOCK_USERS.find(
+        u => u.email.toLowerCase() === email.toLowerCase()
+      );
+      
+      if (!foundUser) {
+        throw new Error("No account found with this email address");
+      }
+      
+      // In a real app, we would send an email with a reset link
+      // For this demo, we'll just log success
+      console.log(`Password reset email sent to ${email}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("quizCraftUser");
@@ -125,6 +152,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login, 
         register, 
         logout,
+        resetPassword,
         isAuthenticated: !!user 
       }}
     >
