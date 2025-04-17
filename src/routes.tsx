@@ -10,6 +10,10 @@ import NotFound from "./pages/NotFound";
 import QuestionBankPage from "./pages/QuestionBankPage";
 import ProfilePage from "./pages/ProfilePage";
 import QuizzesPage from "./pages/QuizzesPage";
+import ReportsPage from "./pages/ReportsPage";
+import QuizResultsPage from "./pages/QuizResultsPage";
+import StudentsPage from "./pages/StudentsPage";
+import QuizEditPage from "./pages/QuizEditPage";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -71,6 +75,22 @@ export const routes = [
     ),
   },
   {
+    path: "/quizzes/:id/edit",
+    element: (
+      <ProtectedRoute>
+        <QuizEditPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/quizzes/:id/results",
+    element: (
+      <ProtectedRoute>
+        <QuizResultsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/question-bank",
     element: (
       <ProtectedRoute>
@@ -83,6 +103,22 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <ProfilePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/reports",
+    element: (
+      <ProtectedRoute>
+        <ReportsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/students",
+    element: (
+      <ProtectedRoute>
+        <StudentsPage />
       </ProtectedRoute>
     ),
   },

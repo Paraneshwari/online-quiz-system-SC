@@ -1,9 +1,8 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { BarChart, BookOpen, FilePlus, Users, ArrowRight, PieChart } from "lucide-react";
+import { BarChart, BookOpen, FilePlus, Users, ArrowRight, PieChart, FileText, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Mock data for instructor dashboard
@@ -129,12 +128,22 @@ export function InstructorDashboard() {
                       )}
                     </div>
                   </div>
-                  <div className="flex justify-end">
-                    <Button variant="outline" size="sm" asChild>
-                      <Link to={`/quizzes/${quiz.id}`}>
-                        {quiz.status === "active" || quiz.status === "ended" ? "View Results" : "Edit"}
-                      </Link>
-                    </Button>
+                  <div className="flex justify-end gap-2">
+                    {quiz.status === "active" || quiz.status === "ended" ? (
+                      <>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link to={`/quizzes/${quiz.id}/results`}>
+                            <Eye className="h-4 w-4 mr-1" /> View Results
+                          </Link>
+                        </Button>
+                      </>
+                    ) : (
+                      <Button variant="outline" size="sm" asChild>
+                        <Link to={`/quizzes/${quiz.id}/edit`}>
+                          Edit
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -191,6 +200,11 @@ export function InstructorDashboard() {
                 <div className="text-xs text-muted-foreground mt-1">15/23 students completed</div>
               </div>
             </div>
+            <Button variant="outline" size="sm" className="w-full mt-4" asChild>
+              <Link to="/students">
+                <Users className="h-4 w-4 mr-2" /> View Students
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -209,6 +223,11 @@ export function InstructorDashboard() {
               <BarChartItem label="Math" value={91} color="green" />
               <BarChartItem label="History" value={84} color="blue" />
             </div>
+            <Button variant="outline" className="w-full mt-4" asChild>
+              <Link to="/reports">
+                <FileText className="h-4 w-4 mr-2" /> View Detailed Reports
+              </Link>
+            </Button>
           </CardContent>
         </Card>
         
