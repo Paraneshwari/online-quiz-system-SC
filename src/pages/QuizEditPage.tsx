@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Save } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Question } from "@/types/quiz";
 
 // Mock quiz data
 const quizData = {
@@ -17,23 +19,34 @@ const quizData = {
     title: "Introduction to Biology",
     description: "Learn the basics of biology with this introductory quiz",
     subject: "Biology",
+    topic: "Biology",
     timeLimit: 30,
     passingScore: 70,
     dueDate: "2025-04-20",
     questions: [
       {
         id: "q1",
-        text: "What is the basic unit of life?",
-        type: "multiple_choice",
-        options: ["Cell", "Tissue", "Organ", "System"],
-        correctAnswer: "Cell",
+        questionText: "What is the basic unit of life?",
+        type: "multiple-choice" as const,
+        choices: [
+          { id: "1", text: "Cell", isCorrect: true },
+          { id: "2", text: "Tissue", isCorrect: false },
+          { id: "3", text: "Organ", isCorrect: false },
+          { id: "4", text: "System", isCorrect: false }
+        ],
+        points: 10
       },
       {
         id: "q2",
-        text: "Which organelle is responsible for photosynthesis?",
-        type: "multiple_choice",
-        options: ["Mitochondria", "Chloroplast", "Golgi Body", "Lysosome"],
-        correctAnswer: "Chloroplast",
+        questionText: "Which organelle is responsible for photosynthesis?",
+        type: "multiple-choice" as const,
+        choices: [
+          { id: "1", text: "Mitochondria", isCorrect: false },
+          { id: "2", text: "Chloroplast", isCorrect: true },
+          { id: "3", text: "Golgi Body", isCorrect: false },
+          { id: "4", text: "Lysosome", isCorrect: false }
+        ],
+        points: 10
       },
     ]
   },
@@ -41,23 +54,34 @@ const quizData = {
     title: "Chemical Reactions",
     description: "Test your knowledge of chemical reactions and equations",
     subject: "Chemistry",
+    topic: "Chemistry",
     timeLimit: 45,
     passingScore: 75,
     dueDate: "2025-04-25",
     questions: [
       {
         id: "q1",
-        text: "What is the pH of a neutral solution?",
-        type: "multiple_choice",
-        options: ["0", "7", "14", "4.5"],
-        correctAnswer: "7",
+        questionText: "What is the pH of a neutral solution?",
+        type: "multiple-choice" as const,
+        choices: [
+          { id: "1", text: "0", isCorrect: false },
+          { id: "2", text: "7", isCorrect: true },
+          { id: "3", text: "14", isCorrect: false },
+          { id: "4", text: "4.5", isCorrect: false }
+        ],
+        points: 10
       },
       {
         id: "q2",
-        text: "What type of reaction is represented by the equation: 2H2 + O2 → 2H2O?",
-        type: "multiple_choice",
-        options: ["Decomposition", "Single displacement", "Double displacement", "Synthesis"],
-        correctAnswer: "Synthesis",
+        questionText: "What type of reaction is represented by the equation: 2H2 + O2 → 2H2O?",
+        type: "multiple-choice" as const,
+        choices: [
+          { id: "1", text: "Decomposition", isCorrect: false },
+          { id: "2", text: "Single displacement", isCorrect: false },
+          { id: "3", text: "Double displacement", isCorrect: false },
+          { id: "4", text: "Synthesis", isCorrect: true }
+        ],
+        points: 10
       },
     ]
   }
@@ -66,9 +90,46 @@ const quizData = {
 export default function QuizEditPage() {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState("details");
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   
   // Find the quiz data based on ID
   const quiz = id ? quizData[id as keyof typeof quizData] : null;
+  
+  // Form setup
+  const form = useForm({
+    defaultValues: {
+      title: quiz?.title || "",
+      description: quiz?.description || "",
+      topic: quiz?.topic || "",
+      timeLimit: quiz?.timeLimit || 30,
+      passingScore: quiz?.passingScore || 70,
+      startDate: undefined,
+      endDate: undefined
+    }
+  });
+  
+  const handleSaveQuestion = (questionData: any) => {
+    console.log("Saving question:", questionData);
+    // Here you would add the question to the quiz
+  };
+  
+  const handleCancelQuestion = () => {
+    setSelectedQuestion(null);
+  };
+  
+  const handleEditQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+  };
+  
+  const handleDeleteQuestion = (questionId: string) => {
+    console.log("Deleting question:", questionId);
+    // Here you would remove the question from the quiz
+  };
+  
+  const handleAddQuestion = () => {
+    setSelectedQuestion(null);
+    setActiveTab("questions");
+  };
   
   if (!quiz) {
     return (
@@ -118,19 +179,9 @@ export default function QuizEditPage() {
               </CardHeader>
               <CardContent>
                 <QuizDetailsForm 
-                  defaultValues={{
-                    title: quiz.title,
-                    description: quiz.description,
-                    subject: quiz.subject,
-                    timeLimit: quiz.timeLimit,
-                    passingScore: quiz.passingScore
-                  }}
+                  form={form}
+                  onNext={() => setActiveTab("questions")}
                 />
-                <div className="flex justify-end mt-6">
-                  <Button onClick={() => setActiveTab("questions")}>
-                    Continue to Questions
-                  </Button>
-                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -142,18 +193,30 @@ export default function QuizEditPage() {
                 <CardDescription>Add and modify questions for your quiz</CardDescription>
               </CardHeader>
               <CardContent>
-                <QuestionsList questions={quiz.questions} />
-                <div className="mt-6">
-                  <QuestionForm />
-                </div>
-                <div className="flex justify-end gap-3 mt-6">
-                  <Button variant="outline" onClick={() => setActiveTab("details")}>
-                    Back
-                  </Button>
-                  <Button onClick={() => setActiveTab("scheduling")}>
-                    Continue to Scheduling
-                  </Button>
-                </div>
+                {selectedQuestion ? (
+                  <QuestionForm
+                    onSave={handleSaveQuestion}
+                    onCancel={handleCancelQuestion}
+                    initialValues={selectedQuestion}
+                  />
+                ) : (
+                  <>
+                    <QuestionsList 
+                      questions={quiz.questions}
+                      onEdit={handleEditQuestion}
+                      onDelete={handleDeleteQuestion}
+                      onAddQuestion={handleAddQuestion}
+                      onBack={() => setActiveTab("details")}
+                      onSubmit={() => setActiveTab("scheduling")}
+                    />
+                    <div className="mt-6">
+                      <QuestionForm
+                        onSave={handleSaveQuestion}
+                        onCancel={handleCancelQuestion}
+                      />
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -165,7 +228,7 @@ export default function QuizEditPage() {
                 <CardDescription>Set availability and due dates for your quiz</CardDescription>
               </CardHeader>
               <CardContent>
-                <QuizScheduling defaultDate={quiz.dueDate} />
+                <QuizScheduling form={form} />
                 <div className="flex justify-end gap-3 mt-6">
                   <Button variant="outline" onClick={() => setActiveTab("questions")}>
                     Back
@@ -190,7 +253,7 @@ export default function QuizEditPage() {
                     <h3 className="text-lg font-medium mb-3">Quiz Visibility</h3>
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2">
-                        <input type="radio" id="public" name="visibility" className="h-4 w-4" checked />
+                        <input type="radio" id="public" name="visibility" className="h-4 w-4" defaultChecked />
                         <label htmlFor="public">Public - All enrolled students can access</label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -204,7 +267,7 @@ export default function QuizEditPage() {
                     <h3 className="text-lg font-medium mb-3">Results Visibility</h3>
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2">
-                        <input type="radio" id="immediate" name="results" className="h-4 w-4" checked />
+                        <input type="radio" id="immediate" name="results" className="h-4 w-4" defaultChecked />
                         <label htmlFor="immediate">Show results immediately after completion</label>
                       </div>
                       <div className="flex items-center space-x-2">
