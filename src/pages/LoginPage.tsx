@@ -2,8 +2,11 @@
 import { Link } from "react-router-dom";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
+  const { loading } = useAuth();
+
   return (
     <PageLayout>
       <div className="container mx-auto py-10">

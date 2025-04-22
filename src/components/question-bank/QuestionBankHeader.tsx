@@ -6,10 +6,16 @@ import { useState } from "react";
 import { useQuestionBank } from "./QuestionBankContext";
 import { QuestionForm } from "@/components/quiz/QuestionForm";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Question } from "@/types/quiz";
 
 export function QuestionBankHeader() {
-  const { setSearchQuery } = useQuestionBank();
+  const { setSearchQuery, addQuestion } = useQuestionBank();
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
+
+  const handleSaveQuestion = (questionData: Question) => {
+    addQuestion(questionData);
+    setIsAddingQuestion(false);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -35,10 +41,7 @@ export function QuestionBankHeader() {
       <Dialog open={isAddingQuestion} onOpenChange={setIsAddingQuestion}>
         <DialogContent className="max-w-3xl">
           <QuestionForm
-            onSave={(question) => {
-              // QuestionForm already has the logic to handle saving
-              setIsAddingQuestion(false);
-            }}
+            onSave={handleSaveQuestion}
             onCancel={() => setIsAddingQuestion(false)}
           />
         </DialogContent>

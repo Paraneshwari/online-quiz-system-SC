@@ -16,11 +16,18 @@ import { useState } from "react";
 import { QuestionForm } from "@/components/quiz/QuestionForm";
 
 export function QuestionBankList() {
-  const { questions, deleteQuestion } = useQuestionBank();
+  const { questions, deleteQuestion, updateQuestion } = useQuestionBank();
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
 
   const handleEdit = (question: Question) => {
     setEditingQuestion(question);
+  };
+
+  const handleSaveEdit = (updatedQuestion: Question) => {
+    if (editingQuestion) {
+      updateQuestion(editingQuestion.id, updatedQuestion);
+      setEditingQuestion(null);
+    }
   };
 
   return (
@@ -74,7 +81,7 @@ export function QuestionBankList() {
           {editingQuestion && (
             <QuestionForm
               initialValues={editingQuestion}
-              onSave={() => setEditingQuestion(null)}
+              onSave={handleSaveEdit}
               onCancel={() => setEditingQuestion(null)}
             />
           )}
