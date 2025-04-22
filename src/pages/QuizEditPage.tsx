@@ -1,14 +1,14 @@
-
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { QuizDetailsForm } from "@/components/quiz/QuizDetailsForm";
 import { QuestionsList } from "@/components/quiz/QuestionsList";
 import { QuestionForm } from "@/components/quiz/QuestionForm";
 import { QuizScheduling } from "@/components/quiz/QuizScheduling";
-import { Button } from "@/components/ui/button";
+import { QuizEditHeader } from "@/components/quiz/QuizEditHeader";
+import { QuizSettings } from "@/components/quiz/QuizSettings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Question } from "@/types/quiz";
@@ -92,10 +92,8 @@ export default function QuizEditPage() {
   const [activeTab, setActiveTab] = useState("details");
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   
-  // Find the quiz data based on ID
   const quiz = id ? quizData[id as keyof typeof quizData] : null;
   
-  // Form setup
   const form = useForm({
     defaultValues: {
       title: quiz?.title || "",
@@ -107,10 +105,9 @@ export default function QuizEditPage() {
       endDate: undefined
     }
   });
-  
+
   const handleSaveQuestion = (questionData: any) => {
     console.log("Saving question:", questionData);
-    // Here you would add the question to the quiz
   };
   
   const handleCancelQuestion = () => {
@@ -123,14 +120,13 @@ export default function QuizEditPage() {
   
   const handleDeleteQuestion = (questionId: string) => {
     console.log("Deleting question:", questionId);
-    // Here you would remove the question from the quiz
   };
   
   const handleAddQuestion = () => {
     setSelectedQuestion(null);
     setActiveTab("questions");
   };
-  
+
   if (!quiz) {
     return (
       <PageLayout>
@@ -148,20 +144,7 @@ export default function QuizEditPage() {
   return (
     <PageLayout>
       <div className="container mx-auto py-10">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" asChild>
-              <Link to="/quizzes">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-            <h1 className="text-3xl font-bold tracking-tight">Edit Quiz</h1>
-          </div>
-          <Button className="gap-2">
-            <Save className="h-4 w-4" />
-            Save Changes
-          </Button>
-        </div>
+        <QuizEditHeader />
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList>
@@ -242,57 +225,7 @@ export default function QuizEditPage() {
           </TabsContent>
           
           <TabsContent value="settings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Quiz Settings</CardTitle>
-                <CardDescription>Configure additional options for your quiz</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium mb-3">Quiz Visibility</h3>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <input type="radio" id="public" name="visibility" className="h-4 w-4" defaultChecked />
-                        <label htmlFor="public">Public - All enrolled students can access</label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input type="radio" id="private" name="visibility" className="h-4 w-4" />
-                        <label htmlFor="private">Private - Only selected students can access</label>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-lg font-medium mb-3">Results Visibility</h3>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <input type="radio" id="immediate" name="results" className="h-4 w-4" defaultChecked />
-                        <label htmlFor="immediate">Show results immediately after completion</label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input type="radio" id="after-due" name="results" className="h-4 w-4" />
-                        <label htmlFor="after-due">Show results after due date</label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input type="radio" id="hidden" name="results" className="h-4 w-4" />
-                        <label htmlFor="hidden">Do not show results to students</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex justify-end gap-3 mt-6">
-                  <Button variant="outline" onClick={() => setActiveTab("scheduling")}>
-                    Back
-                  </Button>
-                  <Button className="gap-2">
-                    <Save className="h-4 w-4" />
-                    Save Changes
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <QuizSettings />
           </TabsContent>
         </Tabs>
       </div>
