@@ -35,15 +35,6 @@ export default function LoginPage() {
               </Link>
             </div>
           </div>
-          
-          <div className="mt-10 border-t border-border pt-4 text-center text-sm text-muted-foreground">
-            <p>Demo credentials for testing:</p>
-            <div className="mt-2 space-y-1">
-              <p><strong>Admin:</strong> admin@quizcraft.com / password</p>
-              <p><strong>Instructor:</strong> instructor@quizcraft.com / password</p>
-              <p><strong>Student:</strong> student@quizcraft.com / password</p>
-            </div>
-          </div>
 
           {registeredEmails.length > 0 && (
             <div className="mt-6 border-t border-border pt-4 text-center text-sm">

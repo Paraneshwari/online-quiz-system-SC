@@ -1,4 +1,3 @@
-
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
@@ -14,10 +13,10 @@ import ReportsPage from "./pages/ReportsPage";
 import QuizResultsPage from "./pages/QuizResultsPage";
 import StudentsPage from "./pages/StudentsPage";
 import QuizEditPage from "./pages/QuizEditPage";
+import SettingsPage from "./pages/SettingsPage";
 
 import { useAuth } from "./contexts/AuthContext";
 
-// Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   
@@ -28,7 +27,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Routes configuration
 export const routes = [
   {
     path: "/",
@@ -119,6 +117,14 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <StudentsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <SettingsPage />
       </ProtectedRoute>
     ),
   },
