@@ -2,20 +2,8 @@
 import { Link } from "react-router-dom";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { useEffect, useState } from "react";
 
 export default function LoginPage() {
-  const [registeredEmails, setRegisteredEmails] = useState<string[]>([]);
-
-  // Load registered users
-  useEffect(() => {
-    const storedUsers = localStorage.getItem("quizCraftRegisteredUsers");
-    if (storedUsers) {
-      const users = JSON.parse(storedUsers);
-      setRegisteredEmails(users.map((u: any) => u.email));
-    }
-  }, []);
-
   return (
     <PageLayout>
       <div className="container mx-auto py-10">
@@ -35,17 +23,6 @@ export default function LoginPage() {
               </Link>
             </div>
           </div>
-
-          {registeredEmails.length > 0 && (
-            <div className="mt-6 border-t border-border pt-4 text-center text-sm">
-              <p className="font-medium text-primary">Your registered emails:</p>
-              <div className="mt-2 space-y-1">
-                {registeredEmails.map((email, index) => (
-                  <p key={index}>{email}</p>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </PageLayout>

@@ -23,30 +23,14 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for demo purposes
-const MOCK_USERS: User[] = [
-  {
-    id: "1",
-    name: "Admin User",
-    email: "admin@quizcraft.com",
-    role: "admin",
-    avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=admin",
-  },
-  {
-    id: "2",
-    name: "Professor Smith",
-    email: "instructor@quizcraft.com",
-    role: "instructor",
-    avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=instructor",
-  },
-  {
-    id: "3",
-    name: "John Student",
-    email: "student@quizcraft.com",
-    role: "student",
-    avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=student",
-  },
-];
+// For demo purposes only - in a real app, this would be handled by a backend
+const DEFAULT_ADMIN = {
+  id: "admin-1",
+  name: "Administrator",
+  email: "admin@example.com",
+  role: "admin" as UserRole,
+  avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=admin",
+};
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -78,13 +62,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check in both mock users and registered users
-      const allUsers = [...MOCK_USERS, ...registeredUsers];
-      const foundUser = allUsers.find(
+      // If first login and it's the admin email, create the admin account
+      if (email.toLowerCase() === DEFAULT_ADMIN.email.toLowerCase() && registeredUsers.length === 0) {
+        setRegisteredUsers([DEFAULT_ADMIN]);
+        setUser(DEFAULT_ADMIN);
+        localStorage.setItem("quizCraftUser", JSON.stringify(DEFAULT_ADMIN));
+        return;
+      }
+      
+      // Check in registered users
+      const foundUser = registeredUsers.find(
         u => u.email.toLowerCase() === email.toLowerCase()
       );
       
-      // In a demo system, allow any password for the mock users
       if (foundUser) {
         setUser(foundUser);
         localStorage.setItem("quizCraftUser", JSON.stringify(foundUser));
@@ -104,9 +94,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check if user already exists in both mock and registered users
-      const allUsers = [...MOCK_USERS, ...registeredUsers];
-      if (allUsers.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+      // Check if user already exists
+      if (registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase())) {
         throw new Error("Email already in use");
       }
       
@@ -136,9 +125,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Check in both mock and registered users
-      const allUsers = [...MOCK_USERS, ...registeredUsers];
-      const foundUser = allUsers.find(
+      // Check in registered users
+      const foundUser = registeredUsers.find(
         u => u.email.toLowerCase() === email.toLowerCase()
       );
       
@@ -147,8 +135,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
       
       // In a real app, we would send an email with a reset link
-      // For this demo, we'll just log success
-      console.log(`Password reset email sent to ${email}`);
+      console.log(`Password reset email would be sent to ${email}`);
     } finally {
       setLoading(false);
     }
