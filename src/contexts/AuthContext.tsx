@@ -23,31 +23,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Sample users for development purposes only
-const SAMPLE_USERS: User[] = [
-  {
-    id: "admin-1",
-    name: "Administrator",
-    email: "admin@example.com",
-    role: "admin",
-    avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=admin",
-  },
-  {
-    id: "instructor-1",
-    name: "Instructor",
-    email: "instructor@example.com",
-    role: "instructor",
-    avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=instructor",
-  },
-  {
-    id: "student-1",
-    name: "Student",
-    email: "student@example.com",
-    role: "student",
-    avatarUrl: "https://api.dicebear.com/7.x/thumbs/svg?seed=student",
-  }
-];
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,41 +37,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    // Simulate API call
     setLoading(true);
     
     try {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Find user by email (case insensitive)
-      const foundUser = SAMPLE_USERS.find(
-        u => u.email.toLowerCase() === email.toLowerCase()
-      );
-      
-      if (foundUser) {
-        setUser(foundUser);
-        localStorage.setItem("quizCraftUser", JSON.stringify(foundUser));
+      // In a real app, we would call an API to log in
+      if (email && password) {
+        // Create a dummy user for demonstration 
+        const newUser: User = {
+          id: `user-${Date.now()}`,
+          name: email.split('@')[0],
+          email,
+          role: email.includes('admin') ? 'admin' : email.includes('instructor') ? 'instructor' : 'student',
+          avatarUrl: `https://api.dicebear.com/7.x/thumbs/svg?seed=${email}`,
+        };
+        
+        setUser(newUser);
+        localStorage.setItem("quizCraftUser", JSON.stringify(newUser));
       } else {
         throw new Error("Invalid email or password");
       }
+    } catch (error) {
+      throw new Error("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
 
   const register = async (name: string, email: string, password: string, role: UserRole) => {
-    // Simulate API call
     setLoading(true);
     
     try {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check if user already exists
-      if (SAMPLE_USERS.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-        throw new Error("Email already in use");
-      }
+      // In a real app, we would call an API to register
       
       // Create new user
       const newUser: User = {
@@ -110,6 +87,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Set current user and save to localStorage
       setUser(newUser);
       localStorage.setItem("quizCraftUser", JSON.stringify(newUser));
+    } catch (error) {
+      throw new Error("Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -121,17 +100,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Check if user exists
-      const foundUser = SAMPLE_USERS.find(
-        u => u.email.toLowerCase() === email.toLowerCase()
-      );
-      
-      if (!foundUser) {
-        throw new Error("No account found with this email address");
+      // In a real app, we would call an API to reset the password
+      if (!email) {
+        throw new Error("Email is required");
       }
       
       // In a real app, we would send an email with a reset link
       console.log(`Password reset would be sent to ${email}`);
+      return Promise.resolve();
+    } catch (error) {
+      throw new Error("Password reset failed. Please try again.");
     } finally {
       setLoading(false);
     }

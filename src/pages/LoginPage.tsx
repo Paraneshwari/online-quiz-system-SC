@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { loading } = useAuth();
+  const { loading, isAuthenticated } = useAuth();
 
   return (
     <PageLayout>

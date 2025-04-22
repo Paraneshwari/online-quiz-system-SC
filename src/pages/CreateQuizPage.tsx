@@ -11,6 +11,9 @@ import { Question } from "@/types/quiz";
 import { QuizDetailsForm } from "@/components/quiz/QuizDetailsForm";
 import { QuestionsList } from "@/components/quiz/QuestionsList";
 import { ArrowLeft, Save } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const quizSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -28,6 +31,8 @@ export default function CreateQuizPage() {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const form = useForm<QuizFormValues>({
     resolver: zodResolver(quizSchema),
@@ -56,15 +61,32 @@ export default function CreateQuizPage() {
   };
 
   const onSubmit = (data: QuizFormValues) => {
+    if (questions.length === 0) {
+      toast({
+        title: "No questions added",
+        description: "Please add at least one question to your quiz.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     console.log({
       ...data,
       questions,
-      published: false,
+      published: true,
+      createdBy: user?.id || "",
       createdAt: new Date(),
       updatedAt: new Date(),
       startDate: data.startDate || null,
       endDate: data.endDate || null,
     });
+
+    toast({
+      title: "Quiz created successfully",
+      description: "Your quiz has been saved and published.",
+    });
+
+    navigate("/quizzes");
   };
 
   return (

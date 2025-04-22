@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -14,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { QuizScheduling } from "./QuizScheduling";
 import { Clock } from "lucide-react";
+import { UseFormReturn } from "react-hook-form";
 
 const topics = [
   "Mathematics",
@@ -27,7 +29,12 @@ const topics = [
   "Foreign Languages",
 ];
 
-export function QuizDetailsForm({ form, onNext }: { form: any; onNext: () => void }) {
+interface QuizDetailsFormProps {
+  form: UseFormReturn<any>;
+  onNext: () => void;
+}
+
+export function QuizDetailsForm({ form, onNext }: QuizDetailsFormProps) {
   return (
     <div className="space-y-6">
       <Card>
@@ -39,7 +46,7 @@ export function QuizDetailsForm({ form, onNext }: { form: any; onNext: () => voi
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="space-y-6">
+            <div className="space-y-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -119,7 +126,7 @@ export function QuizDetailsForm({ form, onNext }: { form: any; onNext: () => voi
                   )}
                 />
               </div>
-            </form>
+            </div>
           </Form>
         </CardContent>
         <CardFooter className="flex justify-between">
@@ -138,7 +145,9 @@ export function QuizDetailsForm({ form, onNext }: { form: any; onNext: () => voi
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <QuizScheduling form={form} />
+          <Form {...form}>
+            <QuizScheduling form={form} />
+          </Form>
         </CardContent>
       </Card>
     </div>
