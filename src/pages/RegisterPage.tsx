@@ -1,9 +1,17 @@
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function RegisterPage() {
+  const { isAuthenticated } = useAuth();
+  
+  // Redirect if user is already authenticated
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
   return (
     <PageLayout>
       <div className="container mx-auto py-10">

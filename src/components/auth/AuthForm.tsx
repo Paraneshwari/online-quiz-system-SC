@@ -83,6 +83,7 @@ export function AuthForm({ type }: AuthFormProps) {
   const navigate = useNavigate();
   const [authError, setAuthError] = useState<string | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
   
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -127,8 +128,7 @@ export function AuthForm({ type }: AuthFormProps) {
     setAuthError(null);
     try {
       await resetPassword(values.email);
-      setIsResetDialogOpen(false);
-      resetPasswordForm.reset();
+      setResetSuccess(true);
       toast({
         title: "Password reset email sent",
         description: "Please check your email for instructions to reset your password.",
@@ -215,38 +215,58 @@ export function AuthForm({ type }: AuthFormProps) {
                       Enter your email address and we'll send you instructions to reset your password.
                     </DialogDescription>
                   </DialogHeader>
-                  <Form {...resetPasswordForm}>
-                    <form onSubmit={resetPasswordForm.handleSubmit(onResetPasswordSubmit)} className="space-y-4">
-                      <FormField
-                        control={resetPasswordForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input placeholder="you@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      {authError && (
-                        <div className="text-sm text-destructive">{authError}</div>
-                      )}
+                  {resetSuccess ? (
+                    <div className="space-y-4">
+                      <p className="text-green-600">
+                        Password reset instructions sent! Please check your email inbox.
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        If you don't see the email, please check your spam folder. The link in the email will be valid for 24 hours.
+                      </p>
                       <DialogFooter>
-                        <Button type="submit" disabled={loading}>
-                          {loading ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Sending...
-                            </>
-                          ) : (
-                            "Send reset instructions"
-                          )}
+                        <Button type="button" onClick={() => {
+                          setIsResetDialogOpen(false);
+                          setResetSuccess(false);
+                          resetPasswordForm.reset();
+                        }}>
+                          Close
                         </Button>
                       </DialogFooter>
-                    </form>
-                  </Form>
+                    </div>
+                  ) : (
+                    <Form {...resetPasswordForm}>
+                      <form onSubmit={resetPasswordForm.handleSubmit(onResetPasswordSubmit)} className="space-y-4">
+                        <FormField
+                          control={resetPasswordForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <Input placeholder="you@example.com" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        {authError && (
+                          <div className="text-sm text-destructive">{authError}</div>
+                        )}
+                        <DialogFooter>
+                          <Button type="submit" disabled={loading}>
+                            {loading ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Sending...
+                              </>
+                            ) : (
+                              "Send reset instructions"
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </Form>
+                  )}
                 </DialogContent>
               </Dialog>
             </div>
