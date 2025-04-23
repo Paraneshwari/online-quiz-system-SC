@@ -1,73 +1,47 @@
-# Welcome to your Lovable project
+# 🎓 Online Quiz System
 
-## Project info
+An interactive and fully responsive web application for creating, managing, and participating in online quizzes.  
+🚀 **Live Demo**: [https://online-quiz-system.lovable.app](https://online-quiz-system.lovable.app)
 
-**URL**: https://lovable.dev/projects/c206754f-bfc3-42b1-82ca-d810dc372a1d
+---
 
-## How can I edit this code?
+## ✨ Overview
 
-There are several ways of editing your application.
+The **Online Quiz System** enables instructors to create rich, media-enhanced quizzes while allowing students to participate, receive feedback, and track performance. Built with a modern stack and clean UI/UX, it provides a seamless experience for users across all roles — students, instructors, and administrators.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c206754f-bfc3-42b1-82ca-d810dc372a1d) and start prompting.
+## 🔧 Built With
 
-Changes made via Lovable will be committed automatically to this repo.
+- ⚡ **[Vite](https://vitejs.dev/)** – Fast build tool and dev server
+- 🟦 **[TypeScript](https://www.typescriptlang.org/)** – Strongly typed JavaScript
+- ⚛️ **[React](https://reactjs.org/)** – UI library for building user interfaces
+- 💅 **[Tailwind CSS](https://tailwindcss.com/)** – Utility-first CSS framework
+- 🧩 **[shadcn/ui](https://ui.shadcn.com/)** – Beautifully styled, accessible components
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🧠 Key Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 👤 Authentication & Roles
+- Secure user sign-up and login
+- Role-based access: Student, Instructor, Admin
+- Profile editing and quiz history view
 
-Follow these steps:
+### 📝 Quiz Features
+- Support for MCQ, True/False, Fill-in-the-blank
+- Media upload for questions (images, etc.)
+- Categorized questions by topic
+- Quiz scheduling with timers and reminders
+- Randomized question pool per attempt
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 📊 Insights & Reports
+- Real-time feedback on quiz submissions
+- Student performance dashboard
+- Instructor reports with per-question analytics
+- Export reports (CSV, PDF)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/c206754f-bfc3-42b1-82ca-d810dc372a1d) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### 🌙 UI and Accessibility
+- Dark Mode & Light Mode toggle
+- Responsive design (mobile-first)
+- Fast, clean interface with shadcn-ui components
