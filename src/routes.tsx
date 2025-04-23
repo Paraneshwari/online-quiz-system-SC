@@ -14,6 +14,10 @@ import QuizResultsPage from "./pages/QuizResultsPage";
 import StudentsPage from "./pages/StudentsPage";
 import QuizEditPage from "./pages/QuizEditPage";
 import SettingsPage from "./pages/SettingsPage";
+import AboutPage from "./pages/AboutPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import TermsPage from "./pages/TermsPage";
+import ContactPage from "./pages/ContactPage";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -127,6 +131,22 @@ export const routes = [
         <SettingsPage />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/about",
+    element: <AboutPage />,
+  },
+  {
+    path: "/privacy",
+    element: <PrivacyPage />,
+  },
+  {
+    path: "/terms",
+    element: <TermsPage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />,
   },
   {
     path: "*",
