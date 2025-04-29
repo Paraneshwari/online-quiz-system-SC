@@ -36,7 +36,7 @@ export default function LandingPage() {
               <div className="rounded-2xl bg-gradient-to-tr from-quiz-purple-dark to-quiz-purple p-1 shadow-xl">
                 <div className="bg-card rounded-xl p-6">
                   <img
-                    src="https://placehold.co/600x400/E5DEFF/7E69AB?text=QuizCraft+Demo"
+                    src="https://placehold.co/600x400/E5DEFF/7E69AB?text=QuizCraft"
                     alt="QuizCraft Interface Preview"
                     className="rounded-lg shadow-sm w-full"
                   />
