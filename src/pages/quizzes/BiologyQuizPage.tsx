@@ -13,24 +13,24 @@ const quizData = {
   questions: [
     {
       id: 1,
-      text: "What is the basic unit of life?",
-      options: ["Cell", "Atom", "Molecule", "Tissue"],
-      correctAnswer: "Cell"
+      text: "What is the powerhouse of the cell?",
+      options: ["Mitochondria", "Nucleus", "Ribosome", "Golgi Apparatus"],
+      correctAnswer: "Mitochondria"
     },
     {
       id: 2,
-      text: "Which organelle is responsible for photosynthesis?",
-      options: ["Mitochondria", "Chloroplast", "Ribosome", "Nucleus"],
-      correctAnswer: "Chloroplast"
+      text: "Which of the following is NOT a type of blood cell?",
+      options: ["Melanocyte", "Red blood cell", "White blood cell", "Platelet"],
+      correctAnswer: "Melanocyte"
     },
     {
       id: 3,
-      text: "What is the function of mitochondria?",
-      options: ["Protein synthesis", "Cellular respiration", "Photosynthesis", "Cell division"],
-      correctAnswer: "Cellular respiration"
+      text: "Photosynthesis occurs in which part of the plant cell?",
+      options: ["Chloroplast", "Mitochondria", "Nucleus", "Cell Wall"],
+      correctAnswer: "Chloroplast"
     }
   ],
-  timeLimit: 15, // minutes
+  timeLimit: 20, // minutes
   createdBy: "Professor Smith",
   createdAt: "2025-04-10",
 };
@@ -79,7 +79,7 @@ export default function BiologyQuizPage() {
   const handleSubmitQuiz = () => {
     // In a real app, we would submit the answers to an API
     // and then navigate to the results page
-    navigate("/quizzes/q1/results");
+    navigate("/quiz/q1/results");
   };
   
   // Format the time remaining as mm:ss

@@ -13,24 +13,24 @@ const quizData = {
   questions: [
     {
       id: 1,
-      text: "What is the derivative of f(x) = x²?",
-      options: ["f'(x) = x", "f'(x) = 2x", "f'(x) = 2", "f'(x) = x²"],
-      correctAnswer: "f'(x) = 2x"
+      text: "Solve the equation: 2x² + 5x - 3 = 0",
+      options: ["x = -3 and x = 0.5", "x = -3 and x = -0.5", "x = 3 and x = -0.5", "x = 3 and x = 0.5"],
+      correctAnswer: "x = -3 and x = 0.5"
     },
     {
       id: 2,
-      text: "What is the value of lim(x→0) sin(x)/x?",
-      options: ["0", "1", "∞", "Undefined"],
-      correctAnswer: "1"
+      text: "What is the derivative of f(x) = x³ + 2x² - 4x + 7?",
+      options: ["3x² + 4x - 4", "3x² + 4x - 1", "3x² + 2x - 4", "x² + 4x - 4"],
+      correctAnswer: "3x² + 4x - 4"
     },
     {
       id: 3,
-      text: "What is the integral of f(x) = 2x?",
-      options: ["f(x) = x²", "f(x) = x² + C", "f(x) = x² - C", "f(x) = 2x"],
-      correctAnswer: "f(x) = x² + C"
+      text: "Calculate the integral of g(x) = 2x + sin(x)",
+      options: ["x² + cos(x) + C", "x² - cos(x) + C", "2x - cos(x) + C", "2x + cos(x) + C"],
+      correctAnswer: "x² - cos(x) + C"
     }
   ],
-  timeLimit: 20, // minutes
+  timeLimit: 30, // minutes
   createdBy: "Dr. Johnson",
   createdAt: "2025-04-12",
 };
@@ -79,7 +79,7 @@ export default function MathQuizPage() {
   const handleSubmitQuiz = () => {
     // In a real app, we would submit the answers to an API
     // and then navigate to the results page
-    navigate("/quizzes/q2/results");
+    navigate("/quiz/q2/results");
   };
   
   // Format the time remaining as mm:ss

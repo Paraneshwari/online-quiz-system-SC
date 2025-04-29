@@ -79,7 +79,7 @@ export default function HistoryQuizPage() {
   const handleSubmitQuiz = () => {
     // In a real app, we would submit the answers to an API
     // and then navigate to the results page
-    navigate("/quizzes/q3/results");
+    navigate("/quiz/q3/results");
   };
   
   // Format the time remaining as mm:ss

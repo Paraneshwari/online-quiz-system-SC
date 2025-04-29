@@ -20,10 +20,15 @@ import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import ContactPage from "./pages/ContactPage";
 
-// Import the new quiz pages
+// Import the quiz pages
 import BiologyQuizPage from "./pages/quizzes/BiologyQuizPage";
 import MathQuizPage from "./pages/quizzes/MathQuizPage";
 import HistoryQuizPage from "./pages/quizzes/HistoryQuizPage";
+
+// Import the quiz results pages
+import BiologyQuizResultsPage from "./pages/quizzes/BiologyQuizResultsPage";
+import MathQuizResultsPage from "./pages/quizzes/MathQuizResultsPage";
+import HistoryQuizResultsPage from "./pages/quizzes/HistoryQuizResultsPage";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -96,6 +101,31 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <HistoryQuizPage />
+      </ProtectedRoute>
+    ),
+  },
+  // Add routes for specific quiz results
+  {
+    path: "/quiz/q1/results",
+    element: (
+      <ProtectedRoute>
+        <BiologyQuizResultsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/quiz/q2/results",
+    element: (
+      <ProtectedRoute>
+        <MathQuizResultsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/quiz/q3/results",
+    element: (
+      <ProtectedRoute>
+        <HistoryQuizResultsPage />
       </ProtectedRoute>
     ),
   },
