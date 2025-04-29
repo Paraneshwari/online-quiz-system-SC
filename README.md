@@ -9,7 +9,7 @@ The **Online Quiz System** enables instructors to create rich, media-enhanced qu
 
 ---
 
-## 🔧 Built With
+## 🔧 Built With these tools
 
 - ⚡ **[Vite](https://vitejs.dev/)** – Fast build tool and dev server
 - 🟦 **[TypeScript](https://www.typescriptlang.org/)** – Strongly typed JavaScript
