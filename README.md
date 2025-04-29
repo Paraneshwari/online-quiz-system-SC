@@ -1,7 +1,8 @@
+
 # 🎓 Online Quiz System
 
 An interactive and fully responsive web application for creating, managing, and participating in online quizzes.  
-🚀 **Live Demo**: [https://online-quiz-system.lovable.app](https://online-quiz-system.lovable.app)
+🚀 **Live Demo**: [https://online-quiz-system.github.io](https://online-quiz-system.github.io)
 
 ---
 
