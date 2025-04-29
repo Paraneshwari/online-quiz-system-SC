@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
@@ -18,6 +19,11 @@ import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import ContactPage from "./pages/ContactPage";
+
+// Import the new quiz pages
+import BiologyQuizPage from "./pages/quizzes/BiologyQuizPage";
+import MathQuizPage from "./pages/quizzes/MathQuizPage";
+import HistoryQuizPage from "./pages/quizzes/HistoryQuizPage";
 
 import { useAuth } from "./contexts/AuthContext";
 
@@ -65,6 +71,31 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <QuizzesPage />
+      </ProtectedRoute>
+    ),
+  },
+  // Add routes for specific quiz types
+  {
+    path: "/quiz/q1",
+    element: (
+      <ProtectedRoute>
+        <BiologyQuizPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/quiz/q2",
+    element: (
+      <ProtectedRoute>
+        <MathQuizPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/quiz/q3",
+    element: (
+      <ProtectedRoute>
+        <HistoryQuizPage />
       </ProtectedRoute>
     ),
   },

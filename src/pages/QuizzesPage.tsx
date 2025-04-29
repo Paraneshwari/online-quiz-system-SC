@@ -77,7 +77,7 @@ export default function QuizzesPage() {
                 </div>
                 <div className="mt-4 flex justify-end">
                   <Button asChild>
-                    <Link to={`/quizzes/${quiz.id}`}>Take Quiz</Link>
+                    <Link to={`/quiz/${quiz.id}`}>Take Quiz</Link>
                   </Button>
                 </div>
               </CardContent>
